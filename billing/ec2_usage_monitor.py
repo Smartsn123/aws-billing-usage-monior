@@ -44,10 +44,13 @@ def get_all_instances_usage(threshold_usage_percentage=5):
                                              'Region': region_name,
                                              'IntervalInSecs': seconds_in_one_day,
                                              'Verdict': 'NO-ALARM',
-                                             'Message': ''})
+                                             'Message': '',
+                                             'MaxUsage':0
+                                             })
                 if response['Datapoints']:
                     all_low = True
                     for dp in response['Datapoints']:
+                        instances_usage_list[-1]['MaxUsage'] = max(instances_usage_list[-1]['MaxUsage'], dp['Maximum'] )
                         if dp['Maximum'] > threshold_usage_percentage:
                             all_low = False
                             break

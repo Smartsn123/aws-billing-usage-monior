@@ -7,6 +7,26 @@ n_days = 7
 today = datetime.datetime.today()
 week_ago = today - datetime.timedelta(days=n_days)
 
+
+sparks = ['▁', '▂', '▃', '▄', '▅', '▆', '▇']  # Leaving out the full block because Slack doesn't like it: '█'
+
+
+def sparkline(datapoints):
+    lower = min(datapoints)
+    upper = max(datapoints)
+    width = upper - lower
+    n_sparks = len(sparks) - 1
+
+    line = ""
+
+    for dp in datapoints:
+        scaled = 1 if width == 0 else (dp - lower) / width
+        which_spark = int(scaled * n_sparks)
+        line += (sparks[which_spark])
+    while len(line) < 7:
+        line += sparks[0]
+    return line
+
 def get_bill_breakdown():
     message_text = ""
     client = boto3.client('ce')
