@@ -45,7 +45,8 @@ def get_all_instances_usage(threshold_usage_percentage=5):
                                              'IntervalInSecs': seconds_in_one_day,
                                              'Verdict': 'NO-ALARM',
                                              'Message': '',
-                                             'MaxUsage':0
+                                             'MaxUsage':0,
+                                             'State':instance["State"]["Name"]
                                              })
                 if response['Datapoints']:
                     all_low = True
@@ -54,7 +55,7 @@ def get_all_instances_usage(threshold_usage_percentage=5):
                         if dp['Maximum'] > threshold_usage_percentage:
                             all_low = False
                             break
-                    if all_low:
+                    if all_low and instance["State"]["Name"] == "running":
                         instances_usage_list[-1]['Verdict'] = 'ALARM'
                         instances_usage_list[-1]['Message'] = 'Usage below {}% for {} days'.format(threshold_usage_percentage,
                                                                                                    monitor_days)
